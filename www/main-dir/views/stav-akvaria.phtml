@@ -1,0 +1,50 @@
+<?php if($_SESSION["logged"]) :?>
+
+<div class="flexContainer settingsFlexContainer">
+
+
+<div class="loginDiv">
+    <h1>Změnit piču</h1>
+
+    <form method="post">
+        Staré heslo: <input type="password" required="required" name="heslo_old"><br><br>
+        Nové heslo: <input type="password" required="required" name="heslo"><br>
+        Zopakovat heslo: <input type="password" required="required" name="heslo02"><br>
+
+        <input type="submit" value="Uložit" name="hesloBtn" >
+    </form>
+</div>
+
+<div class=loginDiv>
+    <h1>Změnit login</h1>
+
+    <form method="post">
+       Login: <input type="text" required="required" name="login" value="<?=$_SESSION['login']?>"><br>
+       
+        <input type="submit" value="Uložit" name="loginBtn" >
+    </form>
+</div>
+
+<div class=loginDiv>
+    <h1>Změnit přezdívku</h1>
+
+    <form method="post">
+        Přezdívka: <input type="text" required="required" name="prezdivka" value='<?=$_SESSION["prezdivka"]?>'><br>
+
+        <input type="submit" value="Uložit" name="prezdivkaBtn" >
+    </form>
+</div>
+
+<div class="break"></div>
+
+<a href="/main/menu" class="button">Zpět</a>
+
+
+
+<?php else : ?>
+<span>
+    Pro zobrazaní obsahu se musíte <a href="/<?=ROOT?>/login">přihlásit</a>
+</span>
+<?php endif; ?>
+
+</div>

@@ -5,14 +5,8 @@
 </div>
 <div style="height: 60%;">
 <div class="flexContainer" style="align-content: flex-start;">
-    <?php if(in_array("oddil",$_SESSION["userGroups"])):/* oddil*/?> 
-        <a href="/oddil" class="menuItem"><h1>Oddílová sekce</h1><img src="/common-dir/content/img/menu/kotva.png"/></a>
-    <?php endif; ?>
-
-    <?php if(in_array("admin",$_SESSION["userRoles"])):/* oddil*/?> 
-        <a href="/main/admin" class="menuItem"><h1>Administrace</h1><img src="/common-dir/content/img/menu/admin.png"/></a>
-    <?php endif; ?>
-
+        <a href="/main/akva-state" class="menuItem"><h1>Stav</h1><img src="/common-dir/content/img/menu/settings.png"/></a>
+        <a href="/main/settings" class="menuItem"><h1>Scénáře</h1><img src="/common-dir/content/img/menu/settings.png"/></a>
         <a href="/main/settings" class="menuItem"><h1>Nastavení</h1><img src="/common-dir/content/img/menu/settings.png"/></a>
         <a href="/main/logout" class="menuItem"><h1>Odhlásit</h1><img src="/common-dir/content/img/menu/logout.png"/></a>
 
