@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs-cz">
+
+<head>
+    <base href="/<?=ROOT?>" />
+    <meta charset="UTF-8" />
+    <meta name="description" content="<?= $popis ?>" />
+    <meta name="keywords" content="<?= $klicova_slova ?>" />
+    <meta name="author" content="Jakub Charvot" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Charvot.cz - <?= $titulek ?></title>
+
+    <?php $version = "2.4"; ?>
+    <link rel="icon" href="<?=ROOT?>-dir/img/icon.png" type="image/png">
+    <link rel="stylesheet" href="common-dir/content/css/var.css?v=<?=$version?>>" type="text/css" />
+    <link rel="stylesheet" href="common-dir/content/css/main.css?v=<?=$version?>" type="text/css" />
+    
+    <link rel="stylesheet" href="<?=ROOT?>-dir/content/css/main.css?v=<?=$version?>" type="text/css" />
+   
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+    body{
+        background: url(./../../../common-dir/content/img/background/bg_dark_dot.png) repeat, url(./../../../common-dir/content/img/background/photo/0<?=rand(1,4);?>.jpg) no-repeat 50% 0%;
+    }
+    </style>
+    
+</head>
+
+<body>
+            <?php 
+            if(!empty($_GET["warnMessage"]))
+            {
+                $text="";
+                switch($_GET["warnMessage"])
+                {
+                    case("itemNotExist"):
+                        $text="Chyba: pro dané id neexistuje žádný předmět ";
+                        break;
+                    case("badPermitions"):
+                        $text="Pro zvolenou část webu nemáš dostatečné oprávnění";
+                        break;
+                    default:
+                        $text= "";
+                        break;
+                }
+                if(!empty($text))
+                    echo '<span class="i-w-message warn-message">'.$text.'</span>';
+            }
+            if(!empty($this->controller->data["warnMessage"]))
+            {
+                $text= $this->controller->data["warnMessage"];
+                echo '<span class="i-w-message warn-message">'.$text.'</span>';                
+            }
+            
+            if(!empty($_GET["infoMessage"]))
+            {
+                $text="";
+                switch($_GET["infoMessage"])
+                {
+                    case("regOk"):
+                        $text= "Tvá registrace proběhla úspěšně, zkus se přihlásit.";
+                        break;
+                    case("addOk"):
+                        $text= "Úspěšně přidáno.";
+                        break;
+                    case("saveOk"):
+                        $text= "Úspěšně uloženo.";
+                        break;
+                    default:
+                        $text= "";
+                        break;
+                }
+                if(!empty($text))
+                    echo '<span class="i-w-message info-message">'.$text.'</span>';
+            }
+            if(!empty($this->controller->data["infoMessage"]))
+            {
+                $text= $this->controller->data["infoMessage"];
+                echo '<span class="i-w-message info-message">'.$text.'</span>';                
+            }
+            ?>
+                
+            <?php $this->controller->vypisPohled(); // vložení aktuálního pohledu do šablony ?>
+            
+            <?php if($_SESSION["logged"]): ?>
+            <div class="headerInfoPanel">
+                <a href="/main/settings"><?=$_SESSION["jmeno"];?></a>
+                <a href="/main/logout">Odhlásit</a>
+            </div>
+            <?php endif; ?>
+
+    <?php if($this->controller::$footerOn): ?>
+    <footer>
+        <span>&copy; Jakub Charvot <?php echo(date("Y")); ?></span><br/>
+    </footer>
+    <?php endif; ?>
+    <div id="back" onclick=""></div>
+</body>
+
+</html>

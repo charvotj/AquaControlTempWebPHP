@@ -1,0 +1,61 @@
+
+<div class="container admin-container">
+    <h1>Administrace</h1>
+    <form id="headerForm" onchange="formChanged('headerForm')" method="POST">
+        <input type="checkbox" <?=($checkboxes['ID'])?"checked":"" ?> name="ID">ID
+        <input type="checkbox" <?=($checkboxes['jmeno'])?"checked":"" ?> name="jmeno">Jméno
+        <input type="checkbox" <?=($checkboxes['prezdivka'])?"checked":"" ?> name="prezdivka">Přezdívka
+        <input type="checkbox" <?=($checkboxes['login'])?"checked":"" ?> name="login">Login
+        <input type="checkbox" <?=($checkboxes['email'])?"checked":"" ?> name="email">E-mail
+        <input type="checkbox" <?=($checkboxes['regDate'])?"checked":"" ?> name="regDate">Datum registrace
+        <input type="checkbox" <?=($checkboxes['accountNumber'])?"checked":"" ?> name="bank">Banka
+        <input type="checkbox" <?=($checkboxes['webs'])?"checked":"" ?> name="webs">Weby
+        <input type="checkbox" <?=($checkboxes['admin'])?"checked":"" ?> name="admin">Admin
+        <?php if($_SESSION["userId"]==1): ?>
+        <br/>
+        <input type="checkbox" <?=($checkboxes['allWebs'])?"checked":"" ?> name="allWebs">Zobraz všechny weby
+        <?php endif; ?>
+    </form>
+    <table border class="admin-table">
+        <thead>
+            <?=($checkboxes['ID'])?"<th>ID</th>":"" ?>
+            <?=($checkboxes['jmeno'])?"<th>Jméno</th>":"" ?>
+            <?=($checkboxes['prezdivka'])?"<th>Přezdívka</th>":"" ?>
+            <?=($checkboxes['login'])?"<th>Login</th>":"" ?>
+            <?=($checkboxes['email'])?"<th>E-mail</th>":"" ?>
+            <?=($checkboxes['regDate'])?"<th>Datum registrace</th>":"" ?>
+            <?=($checkboxes['accountNumber'])?"<th>Č. účtu</th><th>ČM</th>":"" ?>
+            <?=($checkboxes['webs'])?"<th>Weby</th>":"" ?>
+            <?=($checkboxes['admin'])?"<th>Admin</th>":"" ?>
+            <th>Upravit</th>
+        </thead>
+        <tbody>
+            <?php foreach($users as $user): ?>
+                <tr>
+                    <?=($checkboxes['ID'])?"<td>".$user['ID']."</td>":"" ?>
+                    <?=($checkboxes['jmeno'])?"<td>".$user['jmeno']."</td>":"" ?>
+                    <?=($checkboxes['prezdivka'])?"<td>".$user['prezdivka']."</td>":"" ?>
+                    <?=($checkboxes['login'])?"<td>".$user['login']."</td>":"" ?>
+                    <?=($checkboxes['email'])?"<td>".$user['email']."</td>":"" ?>
+                    <?=($checkboxes['regDate'])?"<td>".Globals::prepisDatum($user['regDate'])."</td>":"" ?>
+                    <?=($checkboxes['accountNumber'])?"<td>".$user['accountNumber']."</td><td>".$user['balance']."</td>":"" ?>
+                    <?=($checkboxes['webs'])?"<td>".$user['webs']."</td>":"" ?>
+                    <?=($checkboxes['admin'])?"<td>".(($user['admin']==1)?"ANO":"NE")."</td>":"" ?>
+                    <td><a href="/<?=ROOT?>/admin?userId=<?=$user['ID']?>" target="blank"><img src="/common-dir/content/img/edit.png"</a></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function formChanged(id)
+{
+    let form=document.getElementById(id);
+    form.submit();
+}
+function odkaz(id)
+{
+    window.location='/<?=ROOT?>/admin?userId='+id.toString();
+}
+</script>

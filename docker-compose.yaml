@@ -1,0 +1,33 @@
+version: '3.3'
+
+networks:
+ default:
+  external:
+   name: traefik_default
+
+services:
+ akva-apache:
+  labels:
+   - "traefik.enable=true"
+   - "traefik.http.routers.akva-apache.entrypoints=http"
+   - "traefik.http.routers.akva-apache.rule=Host(`akvaphp.charvot.cz`,`www.akvaphp.charvot.cz`)"
+   - "traefik.http.middlewares.akva-apache-https-redirect.redirectscheme.scheme=https"
+   - "traefik.http.routers.akva-apache.middlewares=akva-apache-https-redirect"
+   #secure
+   - "traefik.http.routers.akva-apache-secure.entrypoints=https"
+   - "traefik.http.routers.akva-apache-secure.rule=Host(`akvaphp.charvot.cz`,`www.akvaphp.charvot.cz`)"
+   - "traefik.http.routers.akva-apache-secure.tls=true"
+#      - "traefik.http.routers.portainer-secure.service=portainer"
+#      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+#      - "traefik.docker.network=proxy"
+#   - "traefik.http.routers.apache.tls.certresolver=production"
+  image: myweb
+  volumes:
+   - ./www:/var/www/html/
+   - ./web_live-data:/var/www/html/live-data
+   - php-config:/usr/local/etc/php
+  restart: always
+ 
+volumes:
+ php-config:
+  driver: local

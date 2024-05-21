@@ -1,0 +1,17 @@
+:root {
+    --main-dark-color: #13316b;
+    --main-mid-color: #2b5bb3;
+    --second-mid-color: #4a69a2;
+
+    --gray01: #f1f0ed;
+    --gray02: #cecece;
+    --gray03: #afafaf;
+    
+    font-size: 16px;
+  }
+  @media (max-width:800px){
+    :root {
+      font-size: 18px;
+    }
+  }
+

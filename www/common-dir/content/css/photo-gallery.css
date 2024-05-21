@@ -1,0 +1,76 @@
+/*fonty*/
+/* @font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/common-dir/content/fonts/glyphicons-halflings-regular.eot');
+  src: url('/common-dir/content/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('fonts/glyphicons-halflings-regular.woff') format('woff'), url('fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+} */
+/*class glyphicon...pouzit vzdy a pÃ…â„¢idat content (nÃ¯Â¿Â½e)*/
+
+
+
+  /*vlastni tridy*/
+  .photoslider{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.829);
+    font-size: 3rem;
+    white-space: nowrap;
+    transition:0.5s;
+    z-index: 3;
+  }
+  #photo {
+    display: flex;
+    width: 100%;
+    height: 90%;
+    justify-content: center;
+    align-items: center;
+  }
+  #photo img {
+    max-height: 100%;  
+    max-width: 100%; 
+    width: auto;
+    height: auto;
+  }
+  #photoName {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    align-content: center;
+    font-size: 1.5rem;
+  }
+  @media (max-width:650px)
+  {
+    #photoName {
+      font-size: 1.1rem;
+    }
+  }
+
+  .photoslider-control{
+    position: relative;
+    width: 100%;
+    height: 75px;
+    background-color: rgba(0, 0, 0, 0.829);
+    z-index: 2;
+    text-align: left;
+    
+  }
+  .photoslider-control span{
+    position: absolute;
+    top:5px;
+    margin: 5px;
+    cursor: pointer;
+    color:white;
+    opacity: 0.7;
+    
+  }
+  .photoslider-control span:hover{
+    opacity: 0.9;
+  }
+  .photoslider-control span img{
+    width: 44px;
+  }
+

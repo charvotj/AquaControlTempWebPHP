@@ -1,0 +1,301 @@
+/* #region STYLY PRO JEDNOTLIVÉ ELEMENTY  */
+
+body {
+    font-family: verdana;
+    /*font-family: 'Courier New', Courier, monospace;*/
+    font-size: 0.88rem;
+    width: 100%;
+    margin: 0 auto;
+    overflow-y: scroll;
+    max-height: 100vh;
+}
+p{
+    line-height: 170%;
+}
+
+h1, h2, h3{
+    text-align: center;
+    color: #444444;
+    text-shadow: 3px 3px 3px #aaaaaa6b;
+    font-family: 'Comfortaa','Courier New', Courier, monospace;
+}
+h1{
+    font-size: 1.88rem;
+    margin-bottom: 16px;
+}
+
+/* tabulka */
+table {
+    padding: 5px;
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+td,th {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+tr:nth-child(odd) {
+    background: white;
+    padding: 5px;
+}
+
+tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 5px;
+}
+
+textarea {
+    border-radius: 5px;
+    border: 1px solid #aaaaaa;
+    /* width: 483px;
+    height: 90px; */
+}
+/* #endregion */
+/* #region STRUKTURA WEBU - ROZLOŽENÍ */
+
+nav {
+    height: 60px;
+    width: 100%;
+    margin: 0px;
+    background-color: #6FA4F8;
+    padding:0px;
+    text-align: right;
+    position: relative;
+    z-index: 3;
+    font-family: 'Comfortaa', verdana;
+}
+
+/* menu */
+#menu{
+    height: 100%;
+    width: 100%;
+    margin: 0px;   
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    /* flex-direction: row; */
+    /* flex-flow: row; */
+    flex-wrap: nowrap;
+}
+
+#menu a {
+    font-size: 1.5rem;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    /* margin-top: auto; */
+    /* margin-bottom: auto; */
+    margin-left: 5px;
+    margin-right: 5px;
+    border: none;
+    cursor: pointer;
+    flex-basis: 20px;
+    white-space:nowrap;
+    max-height: 100%;
+    line-height: 100%;
+}
+
+#menu a:hover {
+    background: #2976f8;
+    color: #EEEEEE;
+    text-decoration: none;
+}
+#menu a img{
+    height: 35px;
+    width: auto;
+}
+
+#hamburger{
+    display: none;
+    position: relative;
+    z-index: 4;
+}
+
+#back{
+    opacity:0;
+    visibility: hidden;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: 1s;
+}
+
+
+article {
+    width: 100%;
+    margin:0px;
+    text-align: justify;
+    /*text-shadow: 3px 3px 3px #aaaaaa;*/
+    padding: 0px;
+    min-height: 82vh;
+}
+
+footer {
+    font-size: 11px;
+    text-align: center;
+    padding: 20px 0px;
+}
+
+@media (max-width:800px){
+    nav{
+        position:fixed;
+        top:0px;
+        height: 50px;
+    }
+    article{
+        margin-top:49px;
+        padding-top:1px;
+    }
+    #menu{
+        /* display: block; */
+        padding-bottom: 10vh;
+        padding-top: 2vh;
+        background-color: rgb(107, 192, 221);
+        position: absolute;
+        top: 50px;
+        right: -80vw;
+        width: 80vw;
+        height: calc(90vh - 50px);
+        z-index: 1;
+        transition: right 0.5s;
+        flex-direction: column;
+    }
+    #menu a{
+        margin-top:5px;
+        margin-bottom:10px
+    }
+    @media(max-height:680px)
+    {
+        #menu a{
+            margin-top: 3px;
+            margin-bottom: 5px;
+            font-size: 1.4rem;
+        }
+    }
+    #menu span{
+        margin-top:auto;
+    }
+    #hamburger{
+        display: inherit;
+    }
+   
+}
+/* #endregion */
+
+/* #region SPOLEČNÉ PRVKY */
+
+input[type="submit"], input[type="button"],button, a.button{
+    background: #6FA4F8;
+    color: white;   
+    border-radius: 10px;
+    border: 0px;
+    padding: 10px 25px;
+    display: block;
+    margin: 5px auto;
+    margin-top: 15px;
+    font-family: Arial;
+    font-size: 13.33px;
+    font-weight: bold;
+    width: max-content;
+    text-decoration: none;
+}
+
+
+input[type="submit"]:hover, input[type="button"]:hover,button:hover, a.button:hover {
+    background: #2976f8;
+    color: #EEEEEE;
+    cursor: pointer;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    /*width: 250px;*/
+    border-radius: 5px;
+    border: 1px solid #aaaaaa;
+    padding: 0.3em;
+    margin: 5px;
+}
+input[required] {
+    background: white url(/common-dir/content/img/red-star.png) no-repeat top right;
+    /*background-size: 10px;*/
+}
+
+.container{
+    width: auto;
+    margin: auto;
+    padding: 10px;
+    max-width: 94vw;
+}
+/* #endregion */
+
+/* #region HLÁŠKY - CHYBA / INFO */
+
+.i-w-message{
+    display: block;    
+    width: max-content;
+    max-width: 516px;
+    margin: 10px auto;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 2px 2px 5px #3c33334a;
+}
+.warn-message{
+    background-color: #fbcfd0;
+    color: #EA2027;
+}
+.info-message{
+    background-color: #c8f5d7;
+    color: #14a244;
+}
+/* #endregion */
+
+/* #region ADMIN */
+
+.admin-container {
+    max-width: 500px;
+    /*text-align: left;*/
+}
+
+.admin-container div {
+    margin-top: 3px;
+}
+
+.admin-container label {
+    width: 50%;
+    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.admin-container img{
+    width: 20px;
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+}
+
+.admin-table td img{
+    height: 20px;
+}
+
+.admin-table td a{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+/* #endregion */
+
+/* #region REGISTRACE */
+.reg-form{
+    width: max-content;
+    padding: 10px;
+    margin: auto;
+    text-align: center;
+}
+/* #endregion */

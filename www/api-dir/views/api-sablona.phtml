@@ -1,0 +1,6 @@
+<?php
+// trochu netypická šablona upravená pro potřeby JSON API, nevypisuje žádný pohled (view)
+
+header('Content-Type: application/json; charset=utf-8');
+
+echo json_encode($this->controller->data);

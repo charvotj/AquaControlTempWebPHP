@@ -1,0 +1,33 @@
+RewriteEngine On
+
+
+# Handled by Traefik Middlewear, not forcing www rn
+# ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ
+#RewriteCond %{HTTP_HOST} (^charvot\.cz|^www.charvot\.cz) [NC]
+#RewriteCond %{HTTPS} off [NC]
+#RewriteRule (.*) https://www.charvot.cz/$1 [R=301,QSA,L]
+
+
+RewriteBase /
+
+RewriteRule (^hra|^aj|^narozeniny|^abaku) - [NC,L]
+
+RewriteRule !\.(css|phcss|js|icon|zip|rar|png|jpg|jpeg|gif|pdf|ttf|woff|woff2|mp3)$ index.php [L]
+
+RewriteRule ^(.*).phcss$ $1.php [L]
+
+AddType application/x-httpd-php .php .phtml
+# AddHandler fcgid-script .phcss
+#AddHandler php-script .phcss
+
+# <FilesMatch "\.phcss$">
+ # ForceType application/x-httpd-php
+  #Header set Content-type "text/css"
+# </FilesMatch>
+
+    AddType application/vnd.ms-fontobject    .eot
+    AddType application/x-font-opentype      .otf
+    AddType image/svg+xml                    .svg
+    AddType application/x-font-ttf           .ttf
+    AddType application/font-woff            .woff
+    AddType application/font-woff2           .woff2

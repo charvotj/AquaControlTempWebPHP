@@ -1,0 +1,24 @@
+<?php //print_r($_SESSION["userGroups"]);
+?>
+<div style="height:34%;display:flex;align-content:flex-start;justify-content:center;">
+    <div class="infoText">Ahoj, zde se zobrazují všechny sekce, do kterých máš přístup, pokud si myslíš, že tu něco chybí, kontaktuj správce webu. Přeji příjmenou zábavu.</div>
+</div>
+<div style="height: 60%;">
+<div class="flexContainer" style="align-content: flex-start;">
+    <?php if(in_array("oddil",$_SESSION["userGroups"])):/* oddil*/?> 
+        <a href="/oddil" class="menuItem"><h1>Oddílová sekce</h1><img src="/common-dir/content/img/menu/kotva.png"/></a>
+    <?php endif; ?>
+
+    <?php if(in_array("admin",$_SESSION["userRoles"])):/* oddil*/?> 
+        <a href="/main/admin" class="menuItem"><h1>Administrace</h1><img src="/common-dir/content/img/menu/admin.png"/></a>
+    <?php endif; ?>
+
+        <a href="/main/settings" class="menuItem"><h1>Nastavení</h1><img src="/common-dir/content/img/menu/settings.png"/></a>
+        <a href="/main/logout" class="menuItem"><h1>Odhlásit</h1><img src="/common-dir/content/img/menu/logout.png"/></a>
+
+<!-- <div class="break"></div>
+    <a href="/main/back" class="menuItem"><h1>Zpět</h1></a> -->
+    
+</div>
+</div>
+

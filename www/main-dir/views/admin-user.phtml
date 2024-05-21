@@ -1,0 +1,78 @@
+<h1>Administrace</h1>
+<div class="container admin-container">
+    <div><label>ID: </label><?=$user['ID']?></div>
+    <div><label>Jméno: </label><?=$user['jmeno']?></div>
+    <div><label>Přezdívka: </label><?=$user['prezdivka']?></div>
+    <div><label>Datum registrace: </label><?=Globals::prepisDatum($user['regDate'])?></div>
+    <div><label>Č. účtu: </label><?=$user['accountNumber']?></div>
+    <div><label>Zůstatek: </label><?=$user['balance']?></div>
+    
+    <form id="loginForm" onchange="formChanged('loginForm')" onkeypress="formChanged('loginForm')" method="POST">
+        <div><label>Login:</label><input type="text" name="login" value="<?=$user['login']?>"><img id="loginFormSubmit"
+                onclick="saveForm('loginForm')" title="Uložit" style="visibility: hidden;"
+                src="/common-dir/content/img/save.png" /></div>
+    </form>
+    <form id="emailForm" onchange="formChanged('emailForm')" onkeypress="formChanged('emailForm')" method="POST">
+        <div><label>E-mail:</label><input type="email" name="email" value="<?=$user['email']?>"><img
+                id="emailFormSubmit" onclick="saveForm('emailForm')" title="Uložit" style="visibility: hidden;"
+                src="/common-dir/content/img/save.png" /></div>
+    </form>
+    <div style="margin-top:10px;"></div>
+    <label>Přístup na weby:</label><img id="webFormSubmit" onclick="saveForm('webForm')" title="Uložit"
+        style="visibility: hidden;" src="/common-dir/content/img/save.png" />
+    <form id="webForm" onchange="formChanged('webForm')" method="POST">
+        <?php 
+        $userWebs = explode(',',$user["webs"]);
+        foreach($webs as $web)
+        {
+            echo "<div><label>".$web['name']."(".$web['ID'].")</label><input type='checkbox' name='web[]' value='".$web['ID']."' ". ((in_array($web['ID'],$userWebs))?"checked":"")."></div>";
+        }
+        ?>
+    </form>
+
+    <div style="margin-top:10px;"></div>
+    <label>Role:</label><img id="rolesFormSubmit" onclick="saveForm('rolesForm')" title="Uložit"
+        style="visibility: hidden;" src="/common-dir/content/img/save.png" />
+    <form id="rolesForm" onchange="formChanged('rolesForm')" method="POST">
+        <?php 
+        $userRoles = explode(',',$user["roles"]);
+        foreach($roles as $role)
+        {
+            echo "<div><label>".$role['name']."(".$role['ID'].")</label><input type='checkbox' name='roles[]' value='".$role['ID']."' ". ((in_array($role['ID'],$userRoles))?"checked":"")."></div>";
+        }
+        ?>
+    </form>
+
+    <div style="margin-top:10px;"></div>
+
+    <?php if($_SESSION["userId"]==1): ?>
+    <label>Admin:</label><img id="adminFormSubmit" onclick="saveForm('adminForm')" title="Uložit" style="visibility: hidden;"
+        src="/common-dir/content/img/save.png" />
+    <form id="adminForm" onchange="formChanged('adminForm')" method="POST">
+        <div style="margin-left:40%;">Ano<input type="radio" name="admin" value="1"
+                <?=($user['admin']==1)?"checked":""?>>
+            Ne<input type="radio" name="admin" value="0" <?=($user['admin']!=1)?"checked":""?>></div>
+    </form>
+    <?php endif; ?>
+
+    <button onclick="window.location.reload()">Zahodit změny</button>
+
+</div>
+
+
+<script>
+    function formChanged(id) {
+        let saveButton = document.getElementById(id+"Submit");
+        saveButton.style.visibility="visible";
+    }
+    function saveForm(id)
+    {
+        let form = document.getElementById(id);
+        if(confirm("Opravdu si přeješ změnit data uživatele?"))
+        form.submit();
+    }
+
+    function odkaz(id) {
+        window.location = '/<?=ROOT?>/admin?userId=' + id.toString();
+    }
+</script>
