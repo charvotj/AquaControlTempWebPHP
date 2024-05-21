@@ -28,6 +28,8 @@
     }
 }
 
+
+
     public static function dotazJeden($dotaz, $parametry = array())
     {
         try{
