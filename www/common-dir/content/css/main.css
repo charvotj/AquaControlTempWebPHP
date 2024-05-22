@@ -299,3 +299,14 @@ input[required] {
     text-align: center;
 }
 /* #endregion */
+
+
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 500px;
+    width: 80vw;
+  }
+.chart-container canvas {
+    background-color: #ffffffd8;
+  }

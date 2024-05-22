@@ -1,104 +1,107 @@
 <?php
 
-class UsersController extends Controller
+class DataController extends Controller
 {
     public function zpracuj($parametry) // parametry obsahují kusy url, viz směrovač
     {
         // nastaveni sablony
         $this->pohled = null; // nebude se vypisovat, není třeba nastavovat
+        $this->responseCode = 200; // HTTP OK
         
         // kontrola verifikace
-        if(empty($_SERVER["HTTP_DISCORD_DIGEST"]) || empty($_SERVER["HTTP_UNIX"]) || !$this->checkDigest($_SERVER["HTTP_DISCORD_DIGEST"], $_SERVER["HTTP_UNIX"]))
+        if(empty($_SERVER["HTTP_API_DIGEST"]) || empty($_SERVER["HTTP_UNIX"]) || !ApiManager::checkDigest($_SERVER["HTTP_API_DIGEST"], $_SERVER["HTTP_UNIX"]))
         {
-            die("Ты гребаный хакер");
+            // comment to skip verification
+            // die("Ты гребаный хакер");
+            // $this->responseCode = 401; // HTTP Unauthorized
         }
        
-        //  /api/users/...
+        //  /api/data/...
         if(!empty($parametry[0]))   
         {
             switch($parametry[0])
             {
-                
-                case("add-access"):  
-                    //  /api/users/add-access
-                    if(isset($_POST["userId"]) && isset($_POST["groupName"]))  
+                //  /api/data/add
+                case("add"):  
+                    $reqData = ApiManager::parseJSONRequest();
+                    // verify
+                    if(!isset($reqData['mainUnitSN']) || !isset($reqData['sensors']))
                     {
-                        $this->data = UserManager::AddUserAcces($_POST["userId"],$_POST["groupName"]);
+                        $this->data = "ERROR - bad request format- ".file_get_contents('php://input');
+                        $this->responseCode = 400; // HTTP bad request
+                        break;
                     }
-                    else                        
-                    {
-                        $this->data = "ERROR - bad request format";
-                    }                
-                    break;
 
-                case("remove-access"):  
-                    //  /api/users/add-access
-                    if(isset($_POST["userId"]) && isset($_POST["groupName"]))  
+                    if(count($reqData['sensors'])>0)
                     {
-                        $this->data = UserManager::RemoveUserAcces($_POST["userId"],$_POST["groupName"]);
+                        foreach ($reqData['sensors'] as $index => $sensor) 
+                        {
+                            // verify
+                            if(!isset($sensor['SN']) || !isset($sensor['nodeType']) || !isset($sensor['dataType']) || !isset($sensor['value']))
+                                continue;
+
+                            // proccess
+                            if(!AkvaManager::AddModuleIfNotAdded($reqData['mainUnitSN'],$sensor['SN'],$sensor['nodeType']) ||
+                               !AkvaManager::AddModuleData($sensor['SN'],$sensor['dataType'],$sensor['value']))
+                            {
+                                $this->data = "ERROR - proccesing sensor data";
+                                $this->responseCode = 555; // custom error code
+                                break;
+                            }
+                        }
+                    }
+                    $this->data = "OK";
+                    break;
+                //  /api/data/view
+                case("view"):  
+                    if(isset($_GET["moduleId"]) && isset($_GET["dataType"]))  
+                    {
+                        $data = AkvaManager::GetModuleData($_GET["moduleId"],$_GET["dataType"]);
+                        if(is_array($data) && count($data) > 0)
+                        {
+                            $filteredData = [];
+                            foreach ($data as $entry) {
+                                // Check if the entry contains the named keys 'time' and 'value'
+                                if (isset($entry['time']) && isset($entry['value'])) {
+                                    // Create a new associative array with only the named keys
+                                    $filteredEntry = [
+                                        'x' => $entry['time'],
+                                        'y' => $entry['value']
+                                    ];
+                                    // Add the filtered entry to the new array
+                                    $filteredData[] = $filteredEntry;
+                                }
+                            }
+                            $this->data = $filteredData;
+                        }
+                        else 
+                        {
+                            $this->data = "Error getting module data";
+                            $this->responseCode = 555;
+                        }
                     }
                     else                        
                     {
                         $this->data = "ERROR - bad request format";
+                        $this->responseCode = 400; // HTTP bad request
                     }                
                     break;
 
                 
                 default:
-                $this->data = "Daná akce není definována";
+                        $this->data = "ERROR - bad request format";
+                        $this->responseCode = 400; // HTTP bad request
                 break;
             }
         }
-        else //  /api/users
+        else //  /api/data
         {
-            if(isset($_POST["groupName"]))  
-            {
-                if($_POST["groupName"]=="all")
-                    $this->data = UserManager::GetUsersAdmin();
-                else
-                {
-                    $response = Db::dotazJeden("SELECT ID from `groups` where name=?",array($_POST["groupName"]));
-                    if($response>0)
-                        $groupId=$response["ID"];
-                    else
-                        return $this->data = "ERROR - Bad group nameee";
-                    $this->data = UserManager::GetUsersAdmin(0,$groupId);
-                }
-            }
-            else                        
-            {
-                $this->data = "ERROR - bad request format";
-            }   
+            $this->data = "ERROR - bad request format";
+            $this->responseCode = 400; // HTTP bad request
         }
 
         
 
 
-    }
-
-    private function checkDigest($digest,$unix)
-    {
-        $discordApiKey = "AkU12hVfBOSsHZMFNkIAcS2UwW0KQTOZYzGX8gjORGrRYTJ8quiYKCG7eklWlxLq";
-
-        //$actualUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        // traefik meni https na http a pak nesedi digest, proto radek zmenen
-        $actualUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-        $hashData = $discordApiKey.$actualUrl.$unix;
-
-        $digestCheck = hash("sha512",$hashData);
-
-        //echo "dig: $digest\ndigCheck: $digestCheck";
-
-        if($digestCheck==$digest)
-        {
-            // check timestamp if it's actual
-            $difference = abs(floor($unix/1000) - time());
-            // echo "\ndiff: $difference";
-            if($difference>300) // > 300s clearly a russian hacker
-                return false;
-            else
-                return true;
-        }
     }
 }

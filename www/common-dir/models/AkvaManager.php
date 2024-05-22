@@ -2,14 +2,7 @@
 
 class AkvaManager
 {
-    public $userId=0;
-    
-    public function __construct($userId)
-    {
-        $this->userId = $userId;
-    }
-
-    public function AddSystem($mainUnitSN)
+    public static function AddSystem($mainUnitSN)
     {
         $sql = "INSERT INTO `akva_systems`(`mainUnitSN`) VALUES (?)";
         if(Db::dotazOld($sql,array($mainUnitSN))>0)
@@ -17,21 +10,38 @@ class AkvaManager
         else return false;
     }
 
-    public function AddModule($mainUnitSN,$nodeSN,$nodeType)
+    public static function AddModule($mainUnitSN,$nodeSN,$nodeType)
     {
-        $systemId = $this->GetSystemId($mainUnitSN);
-        if($systemId <= 0)
-            return false;
-
+        // check if system exists
+        $systemId = self::GetSystemId($mainUnitSN);
+        if($systemId <= 0) // check if exist in database
+        {
+            if(!self::AddSystem($mainUnitSN)) // try to add new system if not exists
+                return false;
+            // check if exists after adding
+            $systemId = self::GetSystemId($mainUnitSN);
+            if($systemId <= 0)
+                return false;
+        }
+        // add module
         $sql = "INSERT INTO `akva_modules`(`systemId`, `nodeType`, `nodeSN`) VALUES (?,?,?)";
         if(Db::dotazOld($sql,array($systemId,$nodeType,$nodeSN))>0)
             return true;
         else return false;
     }
 
-    public function AddModuleData($nodeSN,$dataType,$dataValue)
+    public static function AddModuleIfNotAdded($mainUnitSN,$nodeSN,$nodeType)
     {
-        $moduleId = $this->GetModuleId($nodeSN);
+        // check if module exists
+        $moduleId = self::GetModuleId($nodeSN);
+        if($moduleId <= 0)
+            return self::AddModule($mainUnitSN,$nodeSN,$nodeType);
+        return true; // just return false if already exists
+    }
+
+    public static function AddModuleData($nodeSN,$dataType,$dataValue)
+    {
+        $moduleId = self::GetModuleId($nodeSN);
         if($moduleId <= 0)
             return false;
 
@@ -41,28 +51,57 @@ class AkvaManager
         else return false;
     }
 
-    public function GetSystemId($mainUnitSN)
+    public static function GetModuleData($moduleId,$dataType,$limit =100)
+    {
+        $sql = "SELECT * FROM
+                (
+                    SELECT created as time,dataValue as value 
+                    FROM `akva_module_data` 
+                    WHERE `moduleID`=? and `dataType`=?
+                    ORDER BY time DESC LIMIT ?
+                ) AS sub
+                ORDER BY sub.time ASC;
+        ";
+        return Db::dotazVsechny($sql,array($moduleId,$dataType,$limit));
+    }
+
+    public static function GetSystemId($mainUnitSN)
     {
         $sql = "SELECT akva_systems.ID
         FROM `akva_systems`         
         WHERE mainUnitSN=?";
-        $response = Db::dotazJeden($sql,array($mainUnitSN));
-        if($response < 0 || count($response) === 0)
-            return -1;
-        return $response['ID'];
+        $system = Db::dotazJeden($sql,array($mainUnitSN));
+        if(!empty($system['ID']))
+            return $system['ID'];
+        return -1;
     }
 
-    public function GetModuleId($nodeSN)
+    public static function GetModuleId($nodeSN)
     {
         $sql = "SELECT akva_modules.ID
         FROM `akva_modules`         
         WHERE nodeSN=?";
-        $response = Db::dotazJeden($sql,array($mainUnitSN));
-        if($response < 0 || count($response) === 0)
-            return -1;
-        return $response['ID'];
+        $module = Db::dotazJeden($sql,array($nodeSN));
+        if(!empty($module['ID']))
+            return $module['ID'];
+        return -1;
     }
 
+    public static function GetUserModules($userId)
+    {
+        $sql = "SELECT akva_modules.*, akva_systems.mainUnitSN, akva_systems.systemCustomName
+        FROM `akva_modules`
+        LEFT JOIN akva_user_system
+        ON akva_modules.systemId=akva_user_system.systemId 
+        LEFT JOIN akva_systems
+        ON akva_modules.systemId=akva_systems.ID
+
+        WHERE akva_user_system.userId=?";
+        return Db::dotazVsechny($sql,array($userId));
+    }
+
+
+    // old
     public function GetSentMessages()
     {
         $sql = "SELECT user_message.ID, users.prezdivka, CONCAT(users.jmeno,' ',users.prijmeni) as jmeno, `header`, `body`, `time`, `readed` 

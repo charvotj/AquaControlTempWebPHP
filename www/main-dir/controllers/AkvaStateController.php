@@ -10,6 +10,7 @@ class AkvaStateController extends Controller
 
         $this->pohled = "stav-akvaria";
                
+        $this->data['userModules'] = AkvaManager::GetUserModules($_SESSION["userId"]);
         
     }
 }

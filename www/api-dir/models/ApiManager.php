@@ -1,6 +1,6 @@
 <?php 
 
- class ApiVerificationManager 
+ class ApiManager 
 {
     public static function checkDigest($digest,$unix)
     {
@@ -25,5 +25,12 @@
             else
                 return true;
         }
+    }
+
+    public static function parseJSONRequest()
+    {
+        $rawContent = file_get_contents('php://input');
+        // echo($rawContent);
+        return json_decode($rawContent,true);
     }
 }

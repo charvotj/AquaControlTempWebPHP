@@ -1,41 +1,67 @@
 <?php if($_SESSION["logged"]) :?>
 
-<div class="flexContainer settingsFlexContainer">
+<div id="chartFlexContainer" class="flexContainer settingsFlexContainer">
 
 
-<div class="loginDiv">
-    <h1>Změnit piču</h1>
+    <!-- <div class="chart-container">
+      <canvas id="myChart"></canvas>
+    </div> -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/common-dir/content/js/grafy.js"></script>
+    
+    <script>
+        let moduleId = 0
+        let moduleType = 0
+        let maxDataType = 0
+<?php foreach($userModules as $module): ?>
+<?php /*
+ID
+systemId
+nodeType
+nodeSN
+moduleCustomName
+mainUnitSN
+systemCustomName
+ */ ?>
 
-    <form method="post">
-        Staré heslo: <input type="password" required="required" name="heslo_old"><br><br>
-        Nové heslo: <input type="password" required="required" name="heslo"><br>
-        Zopakovat heslo: <input type="password" required="required" name="heslo02"><br>
+moduleId = <?=$module['ID'];?>
 
-        <input type="submit" value="Uložit" name="hesloBtn" >
-    </form>
-</div>
+moduleType = <?=$module['nodeType'];?>
 
-<div class=loginDiv>
-    <h1>Změnit login</h1>
+<?php 
+switch ($module['nodeType'])
+{
+    case 1: 
+        $numOfData = 1;
+        break;
+    case 2: 
+        $numOfData = 1;
+        break;
+    case 3: 
+        $numOfData = 1;
+        break;
+    case 4: 
+        $numOfData = 2;
+        break;
+    case 5: 
+        $numOfData = 1;
+        break;
 
-    <form method="post">
-       Login: <input type="text" required="required" name="login" value="<?=$_SESSION['login']?>"><br>
+
+} ?>
+
+maxDataType = <?=$numOfData;?>
+
+for(let i=0; i<maxDataType;i++)
+{
+    printPlot(document.getElementById('chartFlexContainer'),'afterChartsElem',moduleId,moduleType,i);
+}
+<?php endforeach;?>
+    </script>
        
-        <input type="submit" value="Uložit" name="loginBtn" >
-    </form>
-</div>
 
-<div class=loginDiv>
-    <h1>Změnit přezdívku</h1>
-
-    <form method="post">
-        Přezdívka: <input type="text" required="required" name="prezdivka" value='<?=$_SESSION["prezdivka"]?>'><br>
-
-        <input type="submit" value="Uložit" name="prezdivkaBtn" >
-    </form>
-</div>
-
-<div class="break"></div>
+<div id='afterChartsElem' class="break"></div>
 
 <a href="/main/menu" class="button">Zpět</a>
 
