@@ -13,5 +13,7 @@ class Error404Controller extends Controller
         // nastaveni sablony
         $this->pohled = 'error404';
 
+        $this->responseCode = 404; // HTTP Page Not Found
+
     }
 }

@@ -67,9 +67,9 @@ input[type="submit"], input[type="button"], button, a.button{
 .loginDiv{
     background-color: var(--gray01);
     width: 351px;
-    height: 262px;
+    min-height: 262px;
     align-self: center;
-    padding: 14px 0px 0px 0px;
+    padding: 14px 0px;
     text-align: center;
     border: 10px solid var(--gray02);
     animation: load-anim 1s;

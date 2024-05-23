@@ -1,0 +1,27 @@
+<?php if($_SESSION["logged"]) :?>
+
+<div style="height:24%;display:flex;align-content:flex-start;justify-content:center;">
+    <div class="infoText">
+        <h1>Přehled nastavení</h1>
+    </div>
+</div>
+
+<div class="flexContainer settingsFlexContainer">
+
+
+
+
+
+<div class="break"></div>
+
+<a href="/main/scenarios" class="button">Zpět</a>
+
+
+
+<?php else : ?>
+<span>
+    Pro zobrazaní obsahu se musíte <a href="/<?=ROOT?>/login">přihlásit</a>
+</span>
+<?php endif; ?>
+
+</div>

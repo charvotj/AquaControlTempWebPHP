@@ -1,0 +1,84 @@
+<?php if($_SESSION["logged"]) :?>
+
+<div style="height:24%;display:flex;align-content:flex-start;justify-content:center;">
+    <div class="infoText">
+        <h1>Nastavitelné moduly</h1>
+    </div>
+</div>
+
+<div class="flexContainer settingsFlexContainer">
+
+
+
+
+<?php foreach($userModules as $module): ?>
+<?php /*
+ID
+systemId
+nodeType
+nodeSN
+moduleCustomName
+mainUnitSN
+systemCustomName
+ */ ?>
+
+<div class="loginDiv">
+    <h1><?=AkvaManager::NodeTypeToString($module['nodeType']);?></h1>
+    Sériové číslo: <?=$module['nodeSN']?>
+
+    <form method="post">
+        <?php switch($module['nodeType']): ?>
+<?php case 2: ?>
+        <h2>LED pásek 1:</h2>
+        Max. intenzita:<input type="range" min="0" max="255" value="100"><br/>
+        Začátek svícení: <input type="time"> Délka přechodu: <input type="number"><br/>
+        Konec svícení:   <input type="time"> Délka přechodu: <input type="number">
+
+        <h2>LED pásek 2:</h2>
+        Max. intenzita:<input type="range" min="0" max="255" value="100"><br/>
+        Začátek svícení: <input type="time"> Délka přechodu: <input type="number"><br/>
+        Konec svícení:   <input type="time"> Délka přechodu: <input type="number">
+<?php break;?>
+<?php case 3: ?>
+        <h2>Nastavení alarmu:</h2>
+        Aktivní: <input type="checkbox" value="0"><br/>
+        Spodní limit: <input type="number">˚C<br/>
+        Horní limit: <input type="number">˚C
+<?php break;?>
+<?php case 4: ?>
+        <h2>Nastavení alarmu:</h2>
+        Aktivní: <input type="checkbox" value="0"><br/>
+        Spodní limit: <input type="number">%<br/>
+        Horní limit: <input type="number">%
+<?php break;?>
+<?php case 5: ?>
+        <h2>Nastavení alarmu:</h2>
+        Aktivní: <input type="checkbox" value="0"><br/>
+        Spodní limit: <input type="number">%<br/>
+        Horní limit: <input type="number">%
+<?php break;?>
+<?php endswitch;?>
+
+        <!-- Staré heslo: <input type="password" required="required" name="heslo_old"><br><br>
+        Nové heslo: <input type="password" required="required" name="heslo"><br>
+        Zopakovat heslo: <input type="password" required="required" name="heslo02"><br> -->
+
+        <input type="submit" value="Uložit" name="hesloBtn" >
+    </form>
+</div>
+<?php endforeach; ?>
+
+
+<div class="break"></div>
+
+<a href="/main/scenarios" class="button">Zpět</a>
+
+
+
+<?php else : ?>
+<span>
+    Pro zobrazaní obsahu se musíte <a href="/<?=ROOT?>/login">přihlásit</a>
+</span>
+<?php endif; ?>
+
+</div>

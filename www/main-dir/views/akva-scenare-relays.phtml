@@ -1,0 +1,42 @@
+<?php if($_SESSION["logged"]) :?>
+
+<div style="height:24%;display:flex;align-content:flex-start;justify-content:center;">
+    <div class="infoText">
+        <h1>Zásuvky 230 V</h1>
+    </div>
+</div>
+
+<div class="flexContainer settingsFlexContainer">
+
+
+
+
+<?php for($i=0;$i<4;$i++): ?>
+<div class="loginDiv">
+    <h1>Zásuvka <?=($i+1);?></h1>
+    Stav: Neznámo
+
+    <form method="post">
+        Manuální: <input type="radio" value="0">Automat: <input type="radio" value="0"><br/>
+        Zapnuto: <input type="checkbox" value="0"><br/>
+        Čas zapnutí: <input type="time"> Čas vypnutí: <input type="time"><br/>
+
+        <input type="submit" value="Uložit" name="hesloBtn" >
+    </form>
+</div>
+<?php endfor; ?>
+
+
+<div class="break"></div>
+
+<a href="/main/scenarios" class="button">Zpět</a>
+
+
+
+<?php else : ?>
+<span>
+    Pro zobrazaní obsahu se musíte <a href="/<?=ROOT?>/login">přihlásit</a>
+</span>
+<?php endif; ?>
+
+</div>

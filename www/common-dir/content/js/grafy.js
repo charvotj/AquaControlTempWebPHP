@@ -88,6 +88,10 @@ async function printPlot(flexContainer, insertBeforeElemId, moduleId, moduleType
         return yVal
       }
 
+    let xTickProcess = (xTick) => `${unixTimestampToTimeString(xTick)}`
+    let yTickProcess = (yTick) => yTick 
+
+
     switch(moduleType)
     {
         case 1:
@@ -107,7 +111,7 @@ async function printPlot(flexContainer, insertBeforeElemId, moduleId, moduleType
             if(dataType === 1)
             {
                 measQuantity = 'Hladina vody - plovák'// veličina
-                yDataProcess = (yVal) => {
+                yTickProcess = (yVal) => {
                     return (yVal == 1)?'Sepnuto':(yVal == 0)?'Rozepnuto':''
                   }
             }
@@ -137,13 +141,14 @@ async function printPlot(flexContainer, insertBeforeElemId, moduleId, moduleType
         scales: {
             x: {
                 ticks: {
-                    callback: value => `${unixTimestampToTimeString(value)}`,
+                    callback: value => xTickProcess(value),
                     font: {size: 20}
                 }
             },
             y: {
-            ticks: {
-                font: {size: 20}
+                ticks: {
+                    callback: value => yTickProcess(value),
+                    font: {size: 20}
                 }
             },
         },
