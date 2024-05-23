@@ -1,0 +1,10 @@
+{
+    "SN":0,
+    "nodeType":4,
+    "alarm":
+    {
+        "active": 0,
+        "minValue": 0.00,
+        "maxValue": 100.00
+    }
+}

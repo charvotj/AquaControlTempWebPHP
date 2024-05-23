@@ -1,0 +1,26 @@
+[
+    {
+        "manual":1,
+        "manualState":0,
+        "timerOn":"12:00",
+        "timerOff":"12:01"
+    },
+    {
+        "manual":1,
+        "manualState":0,
+        "timerOn":"12:00",
+        "timerOff":"12:01"
+    },
+    {
+        "manual":1,
+        "manualState":0,
+        "timerOn":"12:00",
+        "timerOff":"12:01"
+    },
+    {
+        "manual":1,
+        "manualState":0,
+        "timerOn":"12:00",
+        "timerOff":"12:01"
+    }
+]

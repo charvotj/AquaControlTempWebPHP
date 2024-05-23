@@ -1,0 +1,21 @@
+{
+    "SN":0,
+    "nodeType":2,
+    "ledStrips":
+    [
+        {
+            "intensity": 100,
+            "startTime": "8:00",
+            "endTime": "18:00",
+            "riseTime": 20,
+            "fallTime": 20
+        },
+        {
+            "intensity": 100,
+            "startTime": "8:00",
+            "endTime": "18:00",
+            "riseTime": 20,
+            "fallTime": 20
+        }
+    ]
+}
