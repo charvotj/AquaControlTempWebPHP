@@ -10,20 +10,22 @@
 
 
 
-
+<?php $configuration = json_decode(AkvaManager::GetRelaysConfig(2)['relaysConfiguration'],true); /* TODO systemId hardcoded here*/?> 
 <?php for($i=0;$i<4;$i++): ?>
+<?php $relay = $configuration[$i]; ?>
 <div class="loginDiv">
     <h1>Zásuvka <?=($i+1);?></h1>
     Stav: Neznámo
 
     <form method="post">
-        Manuální: <input type="radio" value="0">Automat: <input type="radio" value="0"><br/>
-        Zapnuto: <input type="checkbox" value="0"><br/>
-        Čas zapnutí: <input type="time"> Čas vypnutí: <input type="time"><br/>
+        Manuální: <input type="radio" value="1" <?=($relay['manual']==1)?"checked":"";?>>Automat: <input type="radio" value="0" <?=($relay['manual']==0)?"checked":"";?>><br/>
+        Zapnuto: <input type="checkbox" value="1" <?=($relay['manualState']==1)?"checked":"";?>><br/>
+        Čas zapnutí: <input type="time" value="<?=$relay['timerOn'];?>"> Čas vypnutí: <input type="time" value="<?=$relay['timerOff'];?>"><br/>
 
+        <input type="hidden" value="<?=$i;?>" name="relayNum">
         <input type="submit" value="Uložit" name="hesloBtn" >
     </form>
-</div>
+</div>3
 <?php endfor; ?>
 
 

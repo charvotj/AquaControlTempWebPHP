@@ -8,7 +8,7 @@ class ScenariosController extends Controller
 
        
                
-        $this->data['userModules'] = AkvaManager::GetUserModules($_SESSION["userId"]);
+        
 
          //  /main/scenarios/...
          if(!empty($parametry[0]))   
@@ -27,6 +27,8 @@ class ScenariosController extends Controller
                 //  /main/scenarios/settings
                  case("settings"):  
                     $this->pohled = "akva-scenare-nastaveni";
+                    if(isset($_POST['moduleId']) && isset($_POST['nodeType']))
+                    AkvaManager::SaveModuleConfigFromPost();
                     break;
  
                  
@@ -35,12 +37,13 @@ class ScenariosController extends Controller
                          $this->responseCode = 400; // HTTP bad request
                  break;
              }
+            $this->data['userModules'] = AkvaManager::GetUserModules($_SESSION["userId"]);
          }
          else //  /main/scenarios
          {
             $this->pohled = "akva-scenare-menu";
          }
- 
+         
         
     }
 }

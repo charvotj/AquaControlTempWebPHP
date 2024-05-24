@@ -1,14 +1,14 @@
 <?php if($_SESSION["logged"]) :?>
 
-<div style="height:24%;display:flex;align-content:flex-start;justify-content:center;">
-    <div class="infoText">
-        <h1>Nastavitelné moduly</h1>
-    </div>
-</div>
 
 <div class="flexContainer settingsFlexContainer">
-
-
+    
+    <div style="height:14%;display:flex;align-content:flex-start;justify-content:center;">
+        <div class="infoText">
+            <h1>Nastavitelné moduly</h1>
+        </div>
+    </div>
+    <div class="break"></div>
 
 
 <?php foreach($userModules as $module): ?>
@@ -18,9 +18,11 @@ systemId
 nodeType
 nodeSN
 moduleCustomName
+configuration
 mainUnitSN
 systemCustomName
  */ ?>
+<?php $configuration = json_decode($module['configuration'],true); ?> 
 
 <div class="loginDiv">
     <h1><?=AkvaManager::NodeTypeToString($module['nodeType']);?></h1>
@@ -29,41 +31,48 @@ systemCustomName
     <form method="post">
         <?php switch($module['nodeType']): ?>
 <?php case 2: ?>
+<?php $ledStrip = $configuration['ledStrips'][0]; ?>
         <h2>LED pásek 1:</h2>
-        Max. intenzita:<input type="range" min="0" max="255" value="100"><br/>
-        Začátek svícení: <input type="time"> Délka přechodu: <input type="number"><br/>
-        Konec svícení:   <input type="time"> Délka přechodu: <input type="number">
+        Max. intenzita: <input type="range" name="ledStrip_0_intensity"  min="0" max="255" value="<?=$ledStrip['intensity'];?>"><br/>
+        Začátek svícení: <input type="time" name="ledStrip_0_startTime" value="<?=$ledStrip['startTime'];?>"> Délka přechodu: <input type="number" name="ledStrip_0_riseTime" value="<?=$ledStrip['riseTime'];?>"><br/>
+        Konec svícení:   <input type="time" name="ledStrip_0_endTime" value="<?=$ledStrip['endTime'];?>"> Délka přechodu: <input type="number" name="ledStrip_0_fallTime" value="<?=$ledStrip['fallTime'];?>">
+        
 
+<?php $ledStrip = $configuration['ledStrips'][1]; ?>
         <h2>LED pásek 2:</h2>
-        Max. intenzita:<input type="range" min="0" max="255" value="100"><br/>
-        Začátek svícení: <input type="time"> Délka přechodu: <input type="number"><br/>
-        Konec svícení:   <input type="time"> Délka přechodu: <input type="number">
+        Max. intenzita: <input type="range" name="ledStrip_1_intensity"  min="0" max="255" value="<?=$ledStrip['intensity'];?>"><br/>
+        Začátek svícení: <input type="time" name="ledStrip_1_startTime" value="<?=$ledStrip['startTime'];?>"> Délka přechodu: <input type="number" name="ledStrip_1_riseTime" value="<?=$ledStrip['riseTime'];?>"><br/>
+        Konec svícení:   <input type="time" name="ledStrip_1_endTime" value="<?=$ledStrip['endTime'];?>"> Délka přechodu: <input type="number" name="ledStrip_1_fallTime" value="<?=$ledStrip['fallTime'];?>">
 <?php break;?>
 <?php case 3: ?>
+<?php $alarm = $configuration['alarm']; ?>
         <h2>Nastavení alarmu:</h2>
-        Aktivní: <input type="checkbox" value="0"><br/>
-        Spodní limit: <input type="number">˚C<br/>
-        Horní limit: <input type="number">˚C
+        Aktivní: <input type="checkbox" name="alarm_active" <?=($alarm['active'])?"checked":"";?>><br/>
+        Spodní limit: <input type="number" step=".01" name="alarm_minValue" value="<?=$alarm['minValue'];?>">˚C<br/>
+        Horní limit: <input type="number" step=".01" name="alarm_maxValue" value="<?=$alarm['maxValue'];?>">˚C
 <?php break;?>
 <?php case 4: ?>
+<?php $alarm = $configuration['alarm']; ?>
         <h2>Nastavení alarmu:</h2>
-        Aktivní: <input type="checkbox" value="0"><br/>
-        Spodní limit: <input type="number">%<br/>
-        Horní limit: <input type="number">%
+        Aktivní: <input type="checkbox" name="alarm_active"  <?=($alarm['active'])?"checked":"";?>><br/>
+        Spodní limit: <input type="number" step=".01" name="alarm_minValue" value="<?=$alarm['minValue'];?>">%<br/>
+        Horní limit: <input type="number" step=".01" name="alarm_maxValue" value="<?=$alarm['maxValue'];?>">%
 <?php break;?>
 <?php case 5: ?>
+<?php $alarm = $configuration['alarm']; ?>
         <h2>Nastavení alarmu:</h2>
-        Aktivní: <input type="checkbox" value="0"><br/>
-        Spodní limit: <input type="number">%<br/>
-        Horní limit: <input type="number">%
+        Aktivní: <input type="checkbox" name="alarm_active"  <?=($alarm['active'])?"checked":"";?>><br/>
+        Spodní limit: <input type="number" step=".01" name="alarm_minValue" value="<?=$alarm['minValue'];?>">pH<br/>
+        Horní limit: <input type="number" step=".01" name="alarm_maxValue" value="<?=$alarm['maxValue'];?>">pH
 <?php break;?>
 <?php endswitch;?>
 
         <!-- Staré heslo: <input type="password" required="required" name="heslo_old"><br><br>
         Nové heslo: <input type="password" required="required" name="heslo"><br>
         Zopakovat heslo: <input type="password" required="required" name="heslo02"><br> -->
-
-        <input type="submit" value="Uložit" name="hesloBtn" >
+        <input type="hidden" value="<?=$module['ID'];?>" name="moduleId">
+        <input type="hidden" value="<?=$module['nodeType'];?>" name="nodeType">
+        <input type="submit" value="Uložit" name="saveBtn" >
     </form>
 </div>
 <?php endforeach; ?>
