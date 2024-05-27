@@ -1,5 +1,6 @@
 {
-    "mainUnitSN":0,
+    "mainUnitSN":-1,
+    "configVersion":-1,
     "relaysConfig":[],
     "modulesConfig":[]
 }

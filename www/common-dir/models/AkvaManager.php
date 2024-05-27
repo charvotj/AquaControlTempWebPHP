@@ -28,8 +28,12 @@ class AkvaManager
         // add module
         // load default config
         $moduleConfig = file_get_contents("default-configuration/module-$nodeType-default.json");
+        $moduleConfig = json_decode($moduleConfig,true);
+
+        $moduleConfig['SN'] = $nodeSN;
+        $moduleConfig['nodeType'] = $nodeType;
         $sql = "INSERT INTO `akva_modules`(`systemId`, `nodeType`, `nodeSN`, `configuration`) VALUES (?,?,?,?)";
-        if(Db::dotazOld($sql,array($systemId,$nodeType,$nodeSN,$moduleConfig))>0)
+        if(Db::dotazOld($sql,array($systemId,$nodeType,$nodeSN,json_encode($moduleConfig)))>0)
             return true;
         else return false;
     }
@@ -80,6 +84,17 @@ class AkvaManager
         return -1;
     }
 
+    public static function GetSystemConfigVersion($systemId)
+    {
+        $sql = "SELECT akva_systems.configurationVersion
+                FROM `akva_systems`         
+                WHERE ID=?";
+        $system = Db::dotazJeden($sql,array($systemId));
+        if(!empty($system['configurationVersion']))
+            return $system['configurationVersion'];
+        return -1;
+    }
+
     public static function GetModuleId($nodeSN)
     {
         $sql = "SELECT akva_modules.ID
@@ -120,6 +135,40 @@ class AkvaManager
 
                 WHERE akva_modules.ID=?";
         return Db::dotazJeden($sql,array($moduleId));
+    }
+
+    public static function GetFullSystemConfig($mainUnitSN)
+    {
+        $sql = "SELECT akva_systems.*
+                FROM akva_systems
+
+                WHERE akva_systems.mainUnitSN=?";
+        $system = Db::dotazJeden($sql,array($mainUnitSN)); 
+        if(!isset($system['ID']) || empty($system['ID']))
+            return '';
+
+        $sql = "SELECT akva_modules.configuration
+                FROM `akva_modules`
+
+                WHERE akva_modules.systemId=?";
+        $modules = Db::dotazVsechny($sql,array($system['ID']));
+
+        $modulesConfig = array();
+        foreach ($modules as $index => $module) {
+            $moduleCfg = json_decode($module['configuration']);
+            array_push($modulesConfig, $moduleCfg);
+        }
+
+        // get template config
+        $systemConfig = file_get_contents("default-configuration/system-default-structure.json");
+        $systemConfig = json_decode($systemConfig, true);
+        // fill it
+        $systemConfig['mainUnitSN'] = $system['mainUnitSN'];
+        $systemConfig['configVersion'] = $system['configurationVersion'];
+        $systemConfig['relaysConfig'] = json_decode($system['relaysConfiguration']);
+        $systemConfig['modulesConfig'] = $modulesConfig;
+        // return filled config
+        return $systemConfig;
     }
 
     public static function SaveModuleConfig($moduleId,$newConfig)
